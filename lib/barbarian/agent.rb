@@ -10,12 +10,20 @@ module Barbarian
     self.states = {}
 
     attr_reader :session
+    attr_accessor :sleep_enabled
 
     def initialize(index)
       @index = index
       @session = Mechanize.new
       @session.follow_redirect = true
     end
+
+    def sleep(amount, override_sleep_enabled=nil)
+      if self.sleep_enabled || override_sleep_enabled
+        super(amount)
+      end
+    end
+
 
     def run
       state_name = path[:initial]
