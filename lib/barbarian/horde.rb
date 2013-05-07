@@ -1,5 +1,5 @@
 module Barbarian
-  class Runner
+  class Horde
     #TODO: make this do something!
   end
 end

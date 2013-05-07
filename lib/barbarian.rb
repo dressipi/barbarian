@@ -2,4 +2,4 @@
 module Barbarian
 end
 require 'barbarian/agent'
-require 'barbarian/runner'
+require 'barbarian/horde'
