@@ -36,32 +36,41 @@ class DressipiAgent < Barbarian::Agent
     cat = %w(1 6 2 9 8 12 7 3).sample
     kind = %w(must_have good_1 good_2).sample
     session.get("http://localhost:3000/style_profile/must_haves/#{cat}/#{kind}")
+    sleep(10)
   end
 
   state :likes do
     session.get('http://localhost:3000/style_profile/likes')
+    sleep(4)
   end
 
 
   state :maybenots do
     session.get('http://localhost:3000/style_profile/must_avoids')
+    sleep(15)
   end
 
   state :colours do
     session.get('http://localhost:3000/fashion_fingerprint/your_colours')
+    sleep(5)
   end
 
   state :body_shape do
     session.get('http://localhost:3000/fashion_fingerprint/your_bodyshape')
+    sleep(5)
   end
 
   state :personality do
     session.get('http://localhost:3000/fashion_fingerprint/your_personality')
+    sleep(5)
   end
   
   def submit_height_and_weight
     check_path('/fashion_fingerprint/height_and_weight')
-    form = form_at('#content form.new_user').tap do |form|  
+
+    sleep(11)
+
+    form = form_at('#content form.new_user, #content form.edit_user').tap do |form|  
       form['user[ff_api_profile][imperial_height][feet]'] = 5
       form['user[ff_api_profile][imperial_height][inches]'] = rand(9)
       form['user[ff_api_profile][imperial_weight][pounds]'] = rand(14)
@@ -72,7 +81,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_body_proportions
     check_path('/fashion_fingerprint/body_proportions')
-
+    sleep(5)
     form = form_at('#content form.edit_user').tap  do |form|
       form['user[ff_api_profile][body_proportions]'] = %w(shoulders_hips_equal shoulders_wider_than_hips hips_wider_than_shoulders).sample
     end
@@ -81,6 +90,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_chest_and_waist
     check_path('/fashion_fingerprint/bust_and_waist')
+    sleep(10)
     form = form_at('#content form.edit_user').tap  do |form|
       form['user[ff_api_profile][bust_proportions]'] = "medium"
       form['user[ff_api_profile][waist_proportions]'] = %w(defined undefined).sample
@@ -90,6 +100,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_sizes
     check_path('/fashion_fingerprint/sizes')
+    sleep(30)
     form = form_at('#content form.edit_user').tap  do |form|
       form['user[ff_api_profile][tops_sizing_range_id]'] = "50"
       form['user[ff_api_profile][tops_size_id]'] = %w(5 6).sample
@@ -108,27 +119,32 @@ class DressipiAgent < Barbarian::Agent
   end    
   def submit_reveal_and_conceal
     check_path('/fashion_fingerprint/reveal_and_conceal')
+    sleep(5)
     form = form_at('#content form.edit_user')
     session.submit(form)
   end
 
   def submit_eye_colour
     check_path('/fashion_fingerprint/eye_colour')
+    sleep(5)
     submit_random_radiobutton
   end
 
   def submit_hair_colour
     check_path('/fashion_fingerprint/hair_colour')
+    sleep(5)
     submit_random_radiobutton
     end
 
   def submit_skin_colour
     check_path('/fashion_fingerprint/skin_colour')
+    sleep(5)
     submit_random_radiobutton
   end
 
   def submit_investment_colours
     check_path('/fashion_fingerprint/investment_colours')
+    sleep(5)
     form = form_at('#content form.edit_user')
     form.checkboxes.sample.check
     session.submit(form)
@@ -136,6 +152,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_favourite_colours
     check_path('/fashion_fingerprint/favourite_colours')
+    sleep(5)
     form = form_at('#content form.edit_user')
     form.checkboxes.sample(3).each {|colour| colour.check}
     session.submit(form)
@@ -143,21 +160,25 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_fashion_confidence
     check_path('/fashion_fingerprint/fashion_confidence')
+    sleep(4)
     submit_random_radiobutton
   end
 
   def submit_want_to_change
     check_path('/fashion_fingerprint/want_to_change')
+    sleep(4)
     submit_random_radiobutton
   end
 
   def submit_enjoy_shopping
     check_path('/fashion_fingerprint/enjoy_shopping')
+    sleep(4)
     submit_random_radiobutton
   end
 
   def submit_weekday_occupation
     check_path('/fashion_fingerprint/weekday_occupation')
+    sleep(5)
     form = form_at('#content form.edit_user')
     form.checkboxes.reject {|field| field.dom_class =~ /other/}.sample.check
     session.submit(form)
@@ -165,6 +186,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_dressing_up
     check_path('/fashion_fingerprint/dressing_up')
+    sleep(5)
     form = form_at('#content form.edit_user')
     form.checkboxes.reject {|field| field.dom_class =~ /other/}.sample.check
     session.submit(form)
@@ -172,6 +194,7 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_age
     check_path('/fashion_fingerprint/age')
+    sleep(4)
     form = form_at('#content form.edit_user')
     form.field_with(:name => /age/).value = 25 + rand(30)
     session.submit(form)
@@ -179,11 +202,12 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_garments_step_1
     check_path('/fashion_fingerprint/garments_step_1')
+    sleep(10)
     form = form_at('#content form.edit_user')
     product_codes = session.page.search('.product-cell').collect {|x|  x['data-product-code']}
     prefix = session.page.at('#votes')['data-prefix']
     #these swaps are just to simulate load - we don't actually use the result
-    2.times {|i| do_swap(i, 'garments_step_1', product_codes)}
+    2.times {|i| sleep 2; do_swap(i, 'garments_step_1', product_codes)}
 
     product_codes.each do |p|
       form.add_field! "#{prefix}[#{p}]", '1'
@@ -193,11 +217,12 @@ class DressipiAgent < Barbarian::Agent
 
   def submit_garments_step_2
     check_path('/fashion_fingerprint/garments_step_2')
+    sleep(10)
     form = form_at('#content form.edit_user')
     product_codes = session.page.search('.product-cell').collect {|x|  x['data-product-code']}
     prefix = session.page.at('#votes')['data-prefix']
     #these swaps are just to simulate load - we don't actually use the result
-    2.times {|i| do_swap(i, 'garments_step_2', product_codes)}
+    2.times {|i| sleep 2; do_swap(i, 'garments_step_2', product_codes)}
 
     product_codes.each do |p|
       form.add_field! "#{prefix}[#{p}]", '1'
