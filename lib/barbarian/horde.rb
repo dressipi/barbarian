@@ -24,7 +24,10 @@ module Barbarian
 
     def actor_died(actor, reason)
       @running_count -= 1
-      @failed_count += 1 if reason.is_a?(Exception)
+      if reason.is_a?(Exception)
+        @failed_count += 1 
+        sleep 1
+      end
       spawn if running
     end
 
