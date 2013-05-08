@@ -1,5 +1,5 @@
 require 'active_support/core_ext/class/attribute'
-
+require 'mechanize'
 module Barbarian
 
 
