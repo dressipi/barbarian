@@ -4,6 +4,19 @@ module Barbarian
 
 
   class Agent
+
+    class Context
+      include Celluloid
+      def initialize(horde, klass, options)
+        @horde, @klass, @options = horde, klass, options
+      end
+
+      def run
+        @klass.new(@options).run
+        @horde.async.run_completed(Actor.current)
+      end
+    end
+
     class_attribute :path
     class_attribute :states
     self.path = {}
@@ -12,19 +25,18 @@ module Barbarian
     attr_reader :session
     attr_accessor :sleep_enabled
 
-    def initialize(index)
-      @index = index
+    def initialize(options={})
       @session = Mechanize.new
       @session.follow_redirect = true
+      self.sleep_enabled = options[:sleep_enabled]
     end
 
     def sleep(amount, override_sleep_enabled=nil)
       if self.sleep_enabled || override_sleep_enabled
         amount = amount + rand(amount/5.0) - amount/10.0
-        super(amount)
+        Celluloid.sleep(amount)
       end
     end
-
 
     def run
       state_name = path[:initial]
