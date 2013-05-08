@@ -33,7 +33,6 @@ module Barbarian
       if running
         actor.async.run
       else
-        puts "terminating #{actor.inspect}"
         actor.terminate
       end
     end
