@@ -24,6 +24,7 @@ module Barbarian
 
     attr_reader :session
     attr_accessor :sleep_enabled
+    attr_accessor :verbose
 
     def initialize(options={})
       @session = Mechanize.new
@@ -38,12 +39,16 @@ module Barbarian
       end
     end
 
+
+
     def run
       state_name = path[:initial]
       while state_name != :finished
         @state = states[state_name]
         if @state
-          puts "executing state #{state_name}"
+          if verbose
+            logger.info "executing state #{state_name}"
+          end
           @state.execute(self)
           state_name = case next_state = path[state_name]
           when Symbol then next_state
