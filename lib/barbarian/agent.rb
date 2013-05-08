@@ -25,6 +25,7 @@ module Barbarian
     attr_reader :session
     attr_accessor :sleep_enabled
     attr_accessor :verbose
+    attr_accessor :host
 
     def initialize(options={})
       @session = Mechanize.new
@@ -32,6 +33,7 @@ module Barbarian
       options.each do |attribute, value|
         send("#{attribute}=", value)
       end
+      @host ||= "localhost:3000"
     end
 
     def sleep(amount, override_sleep_enabled=nil)
