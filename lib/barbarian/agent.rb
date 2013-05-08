@@ -29,7 +29,9 @@ module Barbarian
     def initialize(options={})
       @session = Mechanize.new
       @session.follow_redirect = true
-      self.sleep_enabled = options[:sleep_enabled]
+      options.each do |attribute, value|
+        send("#{attribute}=", value)
+      end
     end
 
     def sleep(amount, override_sleep_enabled=nil)
