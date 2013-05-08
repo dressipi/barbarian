@@ -28,6 +28,7 @@ module Barbarian
       spawn if running
     end
 
+
     def run_completed(actor)
       @success_count += 1
       if running
@@ -39,6 +40,7 @@ module Barbarian
 
     def start
       @started = Time.now
+      puts "starting #{@count} #{@agent_klass.name} agents with #{@agent_options.inspect}"
       @count.times do
         sleep 0.5
         spawn
