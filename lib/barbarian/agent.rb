@@ -33,7 +33,7 @@ module Barbarian
       options.each do |attribute, value|
         send("#{attribute}=", value)
       end
-      @host ||= "localhost:3000"
+      @host ||= "http://localhost:3000"
     end
 
     def sleep(amount, override_sleep_enabled=nil)

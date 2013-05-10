@@ -1,4 +1,4 @@
-host: localhost:3000
+host: http://dressipi.dev
 size: 2
 class: NewUserAgent
 sleep: true
