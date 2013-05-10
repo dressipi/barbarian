@@ -45,7 +45,7 @@ module Barbarian
       @started = Time.now
       puts "starting #{@count} #{@agent_klass.name} agents with #{@agent_options.inspect}"
       @count.times do
-        sleep 0.5
+        sleep(120/@count.to_f)
         spawn
       end
     end
