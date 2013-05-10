@@ -26,6 +26,7 @@ module Barbarian
     attr_accessor :sleep_enabled
     attr_accessor :verbose
     attr_accessor :host
+    attr_accessor :credentials
 
     def initialize(options={})
       @session = Mechanize.new
@@ -34,6 +35,9 @@ module Barbarian
         send("#{attribute}=", value)
       end
       @host ||= "http://localhost:3000"
+      if @credentials
+        @session.add_auth(@host, *@credentials.split(':')
+      end
     end
 
     def sleep(amount, override_sleep_enabled=nil)

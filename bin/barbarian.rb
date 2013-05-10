@@ -16,10 +16,11 @@ config_file = nil
 host = nil
 size = nil
 sleep_enabled = false
-
+credentials = nil
 opts = OptionParser.new do |opts|
   opts.on('-h', '--host HOST', 'Host to lay siege to') { |value| host = value}
   opts.on('--config FILE', 'Path to a config file to use') {|value| config_file = value}
+  opts.on('--credentials CREDENTIALS', 'A basic auth style credential string: username:password') {|value| credentials= value}
   opts.on('-s', '--size INTEGER', 'number of agents to use', Integer) {|value| size = value}
   opts.on('-c', '--class ClassName', 'Name of the agent class to use') {|value| klass_name = value} 
   opts.on('--sleep', 'activate agent sleeping is enabled')  {sleep_enabled = true}
@@ -31,6 +32,7 @@ if config_file
   config = YAML.load(File.read(config_file))
   host ||= config['host']
   size ||= config['size']
+  credentials ||= config['credentials']
   klass_name ||= config['class']
   sleep_enabled = config['sleep'] if config.has_key?('sleep')
 end
@@ -44,7 +46,7 @@ size ||= 1
 host ||= 'localhost:3000'
 klass = klass_name.constantize
 
-horde = Barbarian::Horde.new(klass, size, {:host => host, :sleep_enabled => sleep_enabled})
+horde = Barbarian::Horde.new(klass, size, {:host => host, :sleep_enabled => sleep_enabled, :credentials => credentials})
 trap("SIGINT") { puts "shutting down...";horde.stop}
 horde.start
 while horde.running?
