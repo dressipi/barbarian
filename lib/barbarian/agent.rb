@@ -36,7 +36,7 @@ module Barbarian
       end
       @host ||= "http://localhost:3000"
       if @credentials
-        @session.add_auth(@host, *@credentials.split(':')
+        @session.add_auth(@host, *@credentials.split(':'))
       end
     end
 
