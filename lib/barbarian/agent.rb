@@ -42,7 +42,7 @@ module Barbarian
 
     def sleep(amount, override_sleep_enabled=nil)
       if self.sleep_enabled || override_sleep_enabled
-        amount = amount + rand(amount/3.0) - amount/6.0
+        amount = amount + rand(amount/2.0) - amount/4.0
         Celluloid.sleep(amount)
       end
     end
